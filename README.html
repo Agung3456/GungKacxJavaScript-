@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirim Data ke Telegram</title>
+</head>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+  .chat-input {
+    font-family: 'Noto Emoji', 'EmojiFonts', sans-serif; 
+    font-size: 17px;
+    padding: 10px; 
+    border-radius: 10px;
+    outline: none;
+    width: 100%;
+    border: 1px solid #ccc;
+  }
+  
+  @media screen and (max-width: 1440px) {
+    .chat-input{
+      height: 50%;
+    }
+    input{
+      width: 320px;
+    }
+    
+  }
+  
+  .btn-kirim{
+    width: 30%;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    color: #fff;
+    background-color: #4CAF50;
+  }
+  
+  .container-input{
+    display: flex; 
+    padding: 10px; 
+    border-radius: 10px;
+    gap: 0.1rem;
+    border: 1px solid #ccc;
+    background-color: #f5f5f5;
+  }
+  
+  input{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-style: italic;
+  }
+  
+  .cypr{
+    text-align: center; 
+    margin-top: 100%;
+  }
+</style>
+<body>
+  <h2 style="text-align: center;">KIRIM CHAT PERANTARA</h2>
+  <h2 style="text-align: center; margin-top: -20px;">Ke Telegram Admin</h2>
+  <br>
+  <form id="form">
+    <label>Nama:</label>
+    <input type="text" id="nama" maxlength="13" required placeholder="Masukan Nama">
+    
+    <br><br>
+    
+    <label>Nomor:</label>
+    <input type="number" id="nomor" required maxlength="12" placeholder="Masukan Nomor Telepon">
+    
+    <br><br>
+    
+    
+    <div class="container-input">
+    <textarea class="chat-input" id="pesan" placeholder="Isi Pesan" required></textarea>
+    <br>
+    <button class="btn-kirim" type="submit" id="btnKirim">Kirim</button>
+    </div>
+  </form>
+  
+  <div id="hasilPesan"></div>
+  
+<p class="cypr">Copyright by ©GungKac - Javascript 2025</p>
+  <script>
+  
+  
+    const form = document.getElementById('form');
+    const apiToken = '7857845629:AAFK6_eWtcGN0pbjhfxyhJVpKQVttp3_LFw';
+    const chatId = '6656267960';
+    
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nama = document.getElementById('nama').value;
+      const nomor = document.getElementById('nomor').value;
+      const pesan = document.getElementById('pesan').value;
+   
+      document.getElementById('hasilPesan').innerHTML=`
+      <br>
+      <div style="padding: 10px; border: 1px solid #ccc; border-radius: 10px;">
+      <h2>Pesan Terakhir</h2>
+      <p style="margin-top: -15px;">Data Tidak Di Simpan Permanen</p>
+      <hr style="margin-top: -5px">
+        <h4>Nama: ${nama}</h4>
+        <h4 style="margin-top: -20px">Nomor: ${nomor}</h4>
+        <p>Pesan: ${pesan}</p>
+        <p>Note: Ingin Mengirim pesan lagi?. silahkan refresh halaman</p>
+      </div>
+      `
+
+      const url = `https://api.telegram.org/bot${apiToken}/sendMessage`;
+      const data = {
+        chat_id: chatId,
+        text: `Nama: ${nama}\nNomor:  ${nomor}\nPesan: ${pesan}`,
+      };
+
+      fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      .then((response) => response.json())
+      .then((data) => berhasilKirim(data))
+      .catch((error) => alert('error'));
+    
+      function berhasilKirim(data) {
+      swal.fire({
+        title: 'Berhasil Kirim',
+        text: 'Berhasil Mengirim pesan',
+        icon: 'success'
+      })
+      }
+      
+      
+      document.querySelector('.btn-kirim').disabled = true;
+    });
+    
+    
+  </script>
+</body>
+</html>
